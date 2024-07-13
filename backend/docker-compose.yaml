@@ -1,0 +1,27 @@
+#Development only
+
+services:
+  dev-db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=db
+      - POSTGRES_PASSWORD=db
+      - POSTGRES_DB=db
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 5s
+    healthcheck:
+      # any endpoint
+      test: pg_isready -d db
+      interval: 1m
+    networks:
+      - main_network
+    ports:
+      - 5432:5432
+
+networks:
+  main_network:
+    name: main_network
+    driver: bridge

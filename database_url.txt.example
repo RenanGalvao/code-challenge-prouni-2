@@ -1,0 +1,1 @@
+postgresql://db:db@db:5432/db?schema=public

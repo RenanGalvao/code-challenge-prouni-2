@@ -1,0 +1,18 @@
+# Folders
+.github/
+dist/
+node_modules/
+**/test/
+
+# Files
+.env*
+*.md
+*.json
+.dockerignore
+docker-compose.yml
+Dockerfile
+
+!package.json
+!package-lock.json
+!ts*.json
+!prisma/**

@@ -1,0 +1,31 @@
+import { User } from '@prisma/client'
+import { UsersService } from '@src/users/users.service'
+import * as argon2 from 'argon2'
+import { sign, Algorithm } from 'jsonwebtoken'
+import config from '@src/config'
+import { HTTP_ERROR_CODES } from '@src/const'
+import { SignInDto } from './dto'
+
+async function signIn(body: SignInDto) {
+    const { email, password } = body
+    const user = await UsersService.findByEmail(email)
+
+    if (!user || !(await argon2.verify(user.hashedPassword, password))) {
+        throw new Error(HTTP_ERROR_CODES.UNAUTHORIZED)
+    }
+
+    // reduces JWT length
+    const { role, id } = user
+    return await generateToken({ role, id })
+}
+
+function generateToken(user: Partial<User>) {
+    return new Promise(resolve => {
+        sign(user, config.jwt.privateKey, {
+            algorithm: config.jwt.algorithm as Algorithm,
+            expiresIn: config.jwt.expiresIn
+        }, (err, token) => resolve(token))
+    })
+}
+
+export const AuthService = { signIn }

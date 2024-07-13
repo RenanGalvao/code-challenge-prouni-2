@@ -1,0 +1,75 @@
+services:
+  #web:
+  #  build: ./frontend/Dockerfile
+  #  deploy:
+  #    restart_policy:
+  #      condition: on-failure
+  #      delay: 5s
+  #      window: 5s
+  #  healthcheck:
+  #    # sveltekit
+  #    test: wget -qO- 0.0.0.0:3000/health || exit 1
+  #    interval: 1m
+  #  networks:
+  #    - main_network
+  #  depends_on:
+  #    - api
+
+  api:
+    container_name: api
+    build: 
+      context: backend
+    environment:
+      - PORT=3000
+    secrets:
+       - database_url
+    deploy:
+      
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 5s
+    healthcheck:
+      # simple node
+      test: wget -qO- 0.0.0.0:3000/health || exit 1
+      interval: 1m
+    networks:
+      - main_network
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=db
+      - POSTGRES_USER=db
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+    secrets:
+       - postgres_password
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 5s
+    healthcheck:
+      # any endpoint
+      test: pg_isready -d db
+      interval: 1m
+    networks:
+      - main_network
+    ports:
+      - 5432:5432
+
+secrets:
+  postgres_password:
+    file: postgres_password.txt
+  database_url:
+    file: database_url.txt
+
+networks:
+  main_network:
+    name: main_network
+    driver: bridge
