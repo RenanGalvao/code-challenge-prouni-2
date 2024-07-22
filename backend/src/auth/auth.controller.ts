@@ -4,7 +4,7 @@ import { formatResponse } from '@src/utils'
 
 async function signIn(req: Request, res: Response, next: NextFunction) {
     try {
-        res.json(formatResponse(req, res, await AuthService.signIn(req.body)))
+        res.status(201).json(formatResponse(req, res, await AuthService.signIn(req.body)))
     } catch(err) {
         next(err)
     }

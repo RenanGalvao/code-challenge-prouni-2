@@ -72,7 +72,11 @@ export function ExceptionHandler(err: Error, req: Request, res: Response, next: 
             res.status(500)
     }
     if (err.message) {
-        res.send(err.message)
+        res.json({
+            message: err.message,
+            data: {},
+            timestamp: new Date().toISOString()
+        })
     }
 
     next()

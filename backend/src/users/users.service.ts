@@ -16,6 +16,8 @@ async function findMany(query?: PaginationDto) {
             name: true,
             email: true,
             role: true,
+            createdAt: true,
+            updatedAt: true,
         }
     })
 }
@@ -30,6 +32,8 @@ async function findOne(id: string) {
             name: true,
             email: true,
             role: true,
+            createdAt: true,
+            updatedAt: true,
         }
     })
 }
@@ -47,6 +51,8 @@ async function create(body: CreateUserDto) {
             name: true,
             email: true,
             role: true,
+            createdAt: true,
+            updatedAt: true,
         }
     })
 }
@@ -54,6 +60,7 @@ async function create(body: CreateUserDto) {
 async function update(id: string, body: UpdateUserDto) {
     if (body.password) {
         (body as any).hashedPassword = await argon2.hash(body.password)
+        delete body.password
     }
 
     return await PrismaService.user.update({
@@ -64,6 +71,8 @@ async function update(id: string, body: UpdateUserDto) {
             name: true,
             email: true,
             role: true,
+            createdAt: true,
+            updatedAt: true,
         }
     })
 }
