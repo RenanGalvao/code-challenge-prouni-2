@@ -13,7 +13,7 @@ export async function useDeleteItem(path: string, id: string) {
         }
 
         if (res instanceof Response) {
-            if (res.status !== 201) {
+            if (res.status !== 200) {
                 throw new ApiError(await res.json(), res.status)
             }
 

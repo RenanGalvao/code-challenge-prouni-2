@@ -30,8 +30,8 @@ async function sendForm() {
         tokenStore.updateToken(res.data)
         messages.value = res.messages
 
-        setTimeout(() => {
-            router.push({ path: '/' })
+        setTimeout(async () => {
+            await router.push({ path: '/' })
         }, REDIRECT_WAIT)
     } else {
         messages.value = res!.messages

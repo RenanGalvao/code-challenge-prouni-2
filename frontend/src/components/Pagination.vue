@@ -41,7 +41,7 @@ watch(page, async () => {
         </button>
 
         <template v-for="(_, index) of Array(maxPage)" :key="`${index}${new Date().getTime()}`">
-            <button v-if="isPrintablePage(index + 1)">
+            <button v-if="isPrintablePage(index + 1)" class="underline">
                 {{ index + 1 }}
             </button>
         </template>

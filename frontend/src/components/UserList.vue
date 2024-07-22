@@ -13,7 +13,7 @@ defineProps<{
 }>()
 
 defineEmits({
-    'user-delete'(id: string) { return true }
+    'user-delete'(user: User) { return true }
 })
 
 const tokenStore = useTokenStore()
@@ -46,7 +46,7 @@ const tokenStore = useTokenStore()
                 <RouterLink :to="`/edit/${user.id}`">
                     <EditIcon />
                 </RouterLink>
-                <DeleteIcon @click="$emit('user-delete', user.id)" class="ml-4" />
+                <DeleteIcon @click="$emit('user-delete', user)" class="ml-4" />
             </div>
         </div>
     </div>

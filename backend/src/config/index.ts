@@ -28,8 +28,8 @@ export default {
     },
     rateLimiter: {
         global: {
-            points: 1,
-            duration: 1
+            points: 5,
+            duration: 1 // seconds
         } as IRateLimiterOptions,
         authLogin: {
             points: 10,

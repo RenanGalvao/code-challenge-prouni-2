@@ -39,7 +39,7 @@ function handleScroll(event: Event) {
 <template>
     <Transition>
         <RouterLink v-if="tokenStore.isLoggedIn() && showButton" :to="'/add'" class="fixed bottom-4 right-4 z-20 h">
-            <button class="bg-complementary text-dominant p-5 rounded-md">
+            <button class="bg-complementary text-dominant p-4 rounded-md">
                 <PlusIcon />
             </button>
         </RouterLink>

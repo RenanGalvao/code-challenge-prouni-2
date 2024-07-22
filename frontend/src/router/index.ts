@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useTokenStore } from '@/stores/token'
 import UsersListView from '@/views/UsersListView.vue'
+import { useTokenStore } from '@/stores/token'
+import { useScreenWidth } from '@/lib/composables'
 import type { Pagination } from '@/lib/types'
 
 const router = createRouter({
@@ -31,15 +32,16 @@ const router = createRouter({
     {
       path: '/',
       name: 'Usuários',
-      component: UsersListView,
+      component: UsersListView, 
       beforeEnter: (to, from) => {
+        const { LG_SCREEN_SIZE, widthScreen } = useScreenWidth()
         const pagination = {
-          itemsPerPage: 5,
+          itemsPerPage: widthScreen.value >= LG_SCREEN_SIZE ? 10 : 5,
           page: 1
         } as Pagination
 
-        if (Object.keys(to.query).length === 0) {
-          return { path: '/', query: pagination }
+        if(!to.query.page || !to.query.itemsPerPage || Number(to.query.itemsPerPage) !== pagination.itemsPerPage) {
+          return { path: '/', query: { ...pagination, ...from.query } }
         }
       }
     },
