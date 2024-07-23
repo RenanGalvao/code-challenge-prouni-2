@@ -19,46 +19,60 @@ const messages = ref([] as Message[])
 const isLoading = ref(false)
 
 async function sendForm() {
-    isLoading.value = true
-    const res = await useSendForm('/auth/sign-in', 'POST', {
-        email: email.value,
-        password: password.value
-    })
-    isLoading.value = false
+  isLoading.value = true
+  const res = await useSendForm('/auth/sign-in', 'POST', {
+    email: email.value,
+    password: password.value
+  })
+  isLoading.value = false
 
-    if (res instanceof ApiResponse) {
-        tokenStore.updateToken(res.data)
-        messages.value = res.messages
+  if (res instanceof ApiResponse) {
+    tokenStore.updateToken(res.data)
+    messages.value = res.messages
 
-        setTimeout(async () => {
-            await router.push({ path: '/' })
-        }, REDIRECT_WAIT)
-    } else {
-        messages.value = res!.messages
-    }
+    setTimeout(async () => {
+      await router.push({ path: '/' })
+    }, REDIRECT_WAIT)
+  } else {
+    messages.value = res!.messages
+  }
 }
 </script>
 
 <template>
-    <main class="w-full h-full flex flex-col items-center justify-center">
-        <form class="flex flex-col w-10/12 md:w-80">
-            <h1 class="text-3xl text-center mb-2">Acesso</h1>
+  <main class="w-full h-full flex flex-col items-center justify-center">
+    <form class="flex flex-col w-10/12 md:w-80">
+      <h1 class="text-3xl text-center mb-2">Acesso</h1>
 
-            <Input v-model="email" name="email" type="email" placeholder="E-mail" autocomplete="email" required />
-            <Input v-model="password" name="password" type="password" placeholder="Senha"
-                autocomplete="current-password" minlength="8" required />
+      <Input
+        v-model="email"
+        name="email"
+        type="email"
+        placeholder="E-mail"
+        autocomplete="email"
+        required
+      />
+      <Input
+        v-model="password"
+        name="password"
+        type="password"
+        placeholder="Senha"
+        autocomplete="current-password"
+        minlength="8"
+        required
+      />
 
-            <button @click.prevent="sendForm"
-                class="w-full bg-complementary text-dominant rounded py-2 mt-1 flex justify-center">
-                <template v-if="isLoading">
-                    <LoaderIcon />
-                </template>
-                <template v-else>
-                    Entrar
-                </template>
-            </button>
-        </form>
-    </main>
+      <button
+        @click.prevent="sendForm"
+        class="w-full bg-complementary text-dominant rounded py-2 mt-1 flex justify-center"
+      >
+        <template v-if="isLoading">
+          <LoaderIcon />
+        </template>
+        <template v-else> Entrar </template>
+      </button>
+    </form>
+  </main>
 
-    <MessagesContainer :messages />
+  <MessagesContainer :messages />
 </template>

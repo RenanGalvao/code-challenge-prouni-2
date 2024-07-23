@@ -23,43 +23,42 @@ const totalCount = ref(0)
 const totalPages = ref(1)
 
 onMounted(async () => {
-    await loadList()
+  await loadList()
 })
 
 async function loadList() {
-    isLoading.value = true
-    const res = await useLoadList('/users', new URL(window.location.href))
+  isLoading.value = true
+  const res = await useLoadList('/users', new URL(window.location.href))
 
-    if (res instanceof ApiListResponse) {
-        data.value = res.data
-        totalCount.value = res.info.totalCount
-        totalPages.value = res.info.totalPages
-        messages.value = res.messages
-    }
-    isLoading.value = false
+  if (res instanceof ApiListResponse) {
+    data.value = res.data
+    totalCount.value = res.info.totalCount
+    totalPages.value = res.info.totalPages
+    messages.value = res.messages
+  }
+  isLoading.value = false
 }
 
 async function onUserDelete(user: User) {
-    const areYouSure = confirm(TEMPLATES.remove.user(user))
-    if (areYouSure) {
-        const res = await useDeleteItem('/users', user.id)
-        if (res instanceof ApiResponse) {
-            messages.value = res.messages
-            await loadList()
-        }
+  const areYouSure = confirm(TEMPLATES.remove.user(user))
+  if (areYouSure) {
+    const res = await useDeleteItem('/users', user.id)
+    if (res instanceof ApiResponse) {
+      messages.value = res.messages
+      await loadList()
     }
+  }
 }
-
 </script>
 
 <template>
-    <main class="w-full h-full flex flex-col pt-14">
-        <NavBar :page-name="'Usuários'" />
-        <UserList v-if="widthScreen < LG_SCREEN_SIZE" :data @user-delete="onUserDelete" />
-        <UserListLG v-if="widthScreen >= LG_SCREEN_SIZE" :data @user-delete="onUserDelete" />
-        <Pagination :max-page="totalPages" @page-updated="loadList" class="mt-auto" />
-        <UserAddButton />
-    </main>
+  <main class="w-full h-full flex flex-col pt-14">
+    <NavBar :page-name="'Usuários'" />
+    <UserList v-if="widthScreen < LG_SCREEN_SIZE" :data @user-delete="onUserDelete" />
+    <UserListLG v-if="widthScreen >= LG_SCREEN_SIZE" :data @user-delete="onUserDelete" />
+    <Pagination :max-page="totalPages" @page-updated="loadList" class="mt-auto" />
+    <UserAddButton />
+  </main>
 
-    <MessagesContainer :messages />
+  <MessagesContainer :messages />
 </template>

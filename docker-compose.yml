@@ -1,19 +1,22 @@
 services:
-  #web:
-  #  build: ./frontend/Dockerfile
-  #  deploy:
-  #    restart_policy:
-  #      condition: on-failure
-  #      delay: 5s
-  #      window: 5s
-  #  healthcheck:
-  #    # sveltekit
-  #    test: wget -qO- 0.0.0.0:3000/health || exit 1
-  #    interval: 1m
-  #  networks:
-  #    - main_network
-  #  depends_on:
-  #    - api
+  web:
+    container_name: web
+    build: 
+      context: frontend
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        window: 5s
+    #healthcheck:
+    #  test: wget -qO- 0.0.0.0:3000/health || exit 1
+    #  interval: 1m
+    networks:
+      - main_network
+    ports:
+      - 3010:3010
+    depends_on:
+      - api
 
   api:
     container_name: api
@@ -24,13 +27,11 @@ services:
     secrets:
        - database_url
     deploy:
-      
       restart_policy:
         condition: on-failure
         delay: 5s
         window: 5s
     healthcheck:
-      # simple node
       test: wget -qO- 0.0.0.0:3000/health || exit 1
       interval: 1m
     networks:
@@ -55,13 +56,12 @@ services:
         delay: 5s
         window: 5s
     healthcheck:
-      # any endpoint
       test: pg_isready -d db
       interval: 1m
     networks:
       - main_network
     ports:
-      - 5432:5432
+      - :5432
 
 secrets:
   postgres_password:

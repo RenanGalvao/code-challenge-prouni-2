@@ -2,21 +2,23 @@ import { generateMessages } from '@/lib/utils'
 import type { Message, ApiResponse as ApiResponseType } from '@/lib/types'
 
 type ApiListResponseInfo = {
-    status: number
-    totalCount: number
-    totalPages: number
+  status: number
+  totalCount: number
+  totalPages: number
 }
 
 export class ApiListResponse {
-    messages: Message[];
-    data: any;
-    timestamp: string;
-    info: ApiListResponseInfo;
+  messages: Message[]
+  data: any
+  timestamp: string
+  info: ApiListResponseInfo
 
-    constructor(apiData: ApiResponseType, info: ApiListResponseInfo) {
-        this.info = info
-        this.messages = generateMessages([{ message: apiData.message, variant: info.status >= 400 ? 'danger' : 'success', silent: true }])
-        this.data = apiData.data
-        this.timestamp = apiData.timestamp
-    }
+  constructor(apiData: ApiResponseType, info: ApiListResponseInfo) {
+    this.info = info
+    this.messages = generateMessages([
+      { message: apiData.message, variant: info.status >= 400 ? 'danger' : 'success', silent: true }
+    ])
+    this.data = apiData.data
+    this.timestamp = apiData.timestamp
+  }
 }

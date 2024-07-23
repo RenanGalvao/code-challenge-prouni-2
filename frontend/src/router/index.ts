@@ -22,7 +22,7 @@ const router = createRouter({
     {
       path: '/logout',
       name: 'Logout',
-      component: () => { },
+      component: () => {},
       beforeEnter: () => {
         const tokenStore = useTokenStore()
         tokenStore.eraseStore()
@@ -32,7 +32,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'Usuários',
-      component: UsersListView, 
+      component: UsersListView,
       beforeEnter: (to, from) => {
         const { LG_SCREEN_SIZE, widthScreen } = useScreenWidth()
         const pagination = {
@@ -40,7 +40,11 @@ const router = createRouter({
           page: 1
         } as Pagination
 
-        if(!to.query.page || !to.query.itemsPerPage || Number(to.query.itemsPerPage) !== pagination.itemsPerPage) {
+        if (
+          !to.query.page ||
+          !to.query.itemsPerPage ||
+          Number(to.query.itemsPerPage) !== pagination.itemsPerPage
+        ) {
           return { path: '/', query: { ...pagination, ...from.query } }
         }
       }
@@ -71,6 +75,5 @@ const router = createRouter({
     }
   ]
 })
-
 
 export default router

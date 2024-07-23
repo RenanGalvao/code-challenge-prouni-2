@@ -12,38 +12,42 @@ const TIME_TO_FADE = 1 * 1000 // in ms
 let timeout: number = 0
 
 onMounted(() => {
-    window.addEventListener('scroll', handleScroll, true)
+  window.addEventListener('scroll', handleScroll, true)
 })
 
 onUnmounted(() => {
-    window.removeEventListener('scroll', handleScroll, true)
+  window.removeEventListener('scroll', handleScroll, true)
 })
 
 function handleScroll(event: Event) {
-    const scrollTop = (event.target as HTMLDivElement).scrollTop
+  const scrollTop = (event.target as HTMLDivElement).scrollTop
 
-    if (timeout) {
-        clearTimeout(timeout)
-    }
+  if (timeout) {
+    clearTimeout(timeout)
+  }
 
-    if (scrollTop >= MIN_HEIGHT_TO_FADE) {
-        timeout = setTimeout(() => {
-            showButton.value = false
-        }, TIME_TO_FADE)
-    } else {
-        showButton.value = true
-    }
+  if (scrollTop >= MIN_HEIGHT_TO_FADE) {
+    timeout = setTimeout(() => {
+      showButton.value = false
+    }, TIME_TO_FADE)
+  } else {
+    showButton.value = true
+  }
 }
 </script>
 
 <template>
-    <Transition>
-        <RouterLink v-if="tokenStore.isLoggedIn() && showButton" :to="'/add'" class="fixed bottom-4 right-4 z-20 h">
-            <button class="bg-complementary text-dominant p-4 rounded-md">
-                <PlusIcon />
-            </button>
-        </RouterLink>
-    </Transition>
+  <Transition>
+    <RouterLink
+      v-if="tokenStore.isLoggedIn() && showButton"
+      :to="'/add'"
+      class="fixed bottom-4 right-4 z-20 h"
+    >
+      <button class="bg-complementary text-dominant p-4 rounded-md">
+        <PlusIcon />
+      </button>
+    </RouterLink>
+  </Transition>
 </template>
 
 <style>

@@ -38,7 +38,8 @@ COPY --from=base-image --chown=node:node /usr/src/app/dist ./dist
 COPY --from=base-image --chown=node:node /usr/src/app/prisma ./prisma
 COPY --from=base-image --chown=node:node /usr/src/app/node_modules ./node_modules
 COPY --from=base-image --chown=node:node /usr/src/app/start.sh ./
+RUN chmod +x start.sh
 
 USER node:node
 EXPOSE 3000
-CMD ["/bin/sh", "-", "./start.sh"]
+CMD ["/bin/sh", "-c", "./start.sh"]
