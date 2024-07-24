@@ -1,5 +1,5 @@
-import { UserModel } from '@src/users/model'
-import { UsersService } from '@src/users/users.service'
+import { UserModel } from '@src/routes/users/model'
+import { UsersService } from '@src/routes/users/users.service'
 import * as argon2 from 'argon2'
 import { sign, Algorithm } from 'jsonwebtoken'
 import config from '@src/config'

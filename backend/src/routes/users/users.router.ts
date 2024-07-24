@@ -9,9 +9,9 @@ import { PaginationDto } from '@src/pg/dto'
 const baseRoute = 'users'
 const router = Router()
 
-router.get(`/${baseRoute}`, UsersController.findMany)
+router.get(`/${baseRoute}`, ValidateQuery(PaginationDto), UsersController.findMany)
 router.get(`/${baseRoute}/:id`, ValidateParam('id', uuid), UsersController.findOne)
-router.post(`/${baseRoute}`, RoleGuard(Role.ADMIN), ValidateQuery(PaginationDto), ValidateBody(CreateUserDto), UsersController.create)
+router.post(`/${baseRoute}`, RoleGuard(Role.ADMIN), ValidateBody(CreateUserDto), UsersController.create)
 router.put(`/${baseRoute}/:id`, RoleGuard(Role.ADMIN), ValidateParam('id', uuid), ValidateBody(UpdateUserDto), UsersController.update)
 router.delete(`/${baseRoute}/:id`, RoleGuard(Role.ADMIN), ValidateParam('id', uuid), UsersController.remove)
 

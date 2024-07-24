@@ -9,7 +9,7 @@ export function ExceptionHandler(err: Error, req: Request, res: Response, next: 
         return next(err)
     }
 
-    // Validation Body
+    // Validation Body/Query
     if (Array.isArray(err) && err[0] instanceof ValidationError) {
         let data = {} as any
 
@@ -30,16 +30,17 @@ export function ExceptionHandler(err: Error, req: Request, res: Response, next: 
     }
 
     // node postgres
-    if(err instanceof DatabaseError) {
+    if (err instanceof DatabaseError) {
         // duplicate key
-        if(err.code === '23505') {
-            return res.status(400).json({
+        if (err.code === '23505') {
+            res.status(400).json({
                 message: HTTP_ERROR_CODES.BAD_REQUEST,
                 data: err.message,
                 timestamp: new Date().toISOString()
             })
+            return
         }
-    }   
+    }
 
     switch (err.message) {
         case 'invalid signature': //JsonWebTokenError
@@ -61,7 +62,6 @@ export function ExceptionHandler(err: Error, req: Request, res: Response, next: 
             res.status(429)
             break;
         default:
-            console.log(err)
             logger.warn(err)
             res.status(500)
     }

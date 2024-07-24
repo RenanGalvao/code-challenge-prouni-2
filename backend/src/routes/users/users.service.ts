@@ -37,7 +37,6 @@ async function create(body: CreateUserDto) {
         values: [body.name, body.email, body.role, await argon2.hash(body.password)]
     }
     const res = (await pgService.query<UserModel>(query))
-    console.log(res)
     return res.rows[0]
 }
 
@@ -67,7 +66,6 @@ async function update(id: string, body: UpdateUserDto) {
         values,
     }
     const res = (await pgService.query<UserModel>(query))
-    console.log(res)
     return res.rows[0]
 }
 

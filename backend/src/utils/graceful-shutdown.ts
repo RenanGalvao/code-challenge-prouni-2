@@ -6,8 +6,11 @@ async function tasks(server: Server, signal: string) {
     logger.info(`${signal} signal received.`)
     server.close(async () => {
         logger.info('Closed out remaining connections.')
-        await pgService.end()
-        process.exit(0)
+        try {
+            await pgService.end()
+        } finally {
+            process.exit(0)
+        }
     })
 }
 

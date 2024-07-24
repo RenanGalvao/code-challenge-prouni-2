@@ -1,16 +1,14 @@
 import { Request, Response, NextFunction } from 'express'
 import { validateOrReject } from 'class-validator';
+import { plainToInstance } from 'class-transformer'
 
 export function ValidateQuery(dto: any) {
     return async function (req: Request, res: Response, next: NextFunction) {
-        let post = new dto();
-        for (const [key, value] of Object.entries(req.body)) {
-            post[key] = value
-        }
-
         try {
-            await validateOrReject(post, { whitelist: true, transform: true, transformOptions: { enableImplicitConversion: true } }) 
-            req.query = post // query reflects DTO, whitelisting...
+            // options remove unexposed properties and undefined values from final instance
+            const query: any = plainToInstance(dto, req.query, { excludeExtraneousValues: true, exposeUnsetFields: false })
+            req.query = query
+            await validateOrReject(query)
         } catch (errs) {
             next(errs)
         }

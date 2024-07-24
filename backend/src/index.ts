@@ -2,11 +2,10 @@ import express from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
 import config from '@src/config'
-import { UsersRouter } from '@src/users'
-import { AuthRouter } from '@src/auth'
-import { HealthRouter } from '@src/health'
-import { RateLimiter, Jwt, ExceptionHandler } from '@src/middlewares'
-import { HTTP_ERROR_CODES } from '@src/const'
+import { UsersRouter } from '@src/routes/users'
+import { AuthRouter } from '@src/routes/auth'
+import { HealthRouter } from '@src/routes/health'
+import { RateLimiter, Jwt, ExceptionHandler, Custom404 } from '@src/middlewares'
 import { logger, appInitLog, gracefulShutdown } from '@src/utils'
 
 const app = express()
@@ -32,9 +31,7 @@ app.use(HealthRouter)
 app.use(AuthRouter)
 app.use(UsersRouter)
 
-app.use(function Custom404(req, res, next) {
-  res.status(404).send(HTTP_ERROR_CODES.NOT_FOUND)
-})
+app.use(Custom404)
 app.use(ExceptionHandler)
 
 const server = app.listen(config.app.port, () => {

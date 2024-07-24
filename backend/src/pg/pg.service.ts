@@ -5,6 +5,7 @@ import { readFileSync } from 'fs'
 import { PaginationDto } from './dto'
 
 class PgService extends Pool {
+    // used to paginate
     getLimitOffsetFromQuery(query?: PaginationDto) {
         query = Object.assign({}, { page: 1, itemsPerPage: 10 }, query)
 

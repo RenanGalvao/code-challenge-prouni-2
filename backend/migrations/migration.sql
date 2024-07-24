@@ -16,10 +16,10 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- Auto Update updatedAt field
 CREATE EXTENSION IF NOT EXISTS moddatetime;
-CREATE TRIGGER "users_updated_at"
-    BEFORE UPDATE ON "users"
-    FOR EACH ROW
-    EXECUTE PROCEDURE moddatetime ("updatedAt");
+
+CREATE TRIGGER "users_updated_at" BEFORE
+UPDATE
+    ON "users" FOR EACH ROW EXECUTE PROCEDURE moddatetime ("updatedAt");
 
 -- Create Admin User - password 12345678
 INSERT INTO

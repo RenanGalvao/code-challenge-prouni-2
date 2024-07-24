@@ -1,4 +1,4 @@
-async function health() {
+function health() {
     return {
         uptime: process.uptime(),
         ok: true
