@@ -3,7 +3,7 @@ import { TEMPLATE } from './template'
 import { MESSAGE, routes } from '@src/const'
 import { logger } from '@src/utils'
 
-function handleData(res: Response, handlerName: string, resData: any) {
+function handleData(res: Response, handlerName: string, resData: any = {}) {
 	if (handlerName.match(/many/i) && Object.keys(resData).includes('totalCount')) {
 		const { data, totalCount, totalPages } = resData
 

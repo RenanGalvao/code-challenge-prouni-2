@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
 import { HTTP_ERROR_CODES } from '@src/const'
 import { ValidationError } from 'class-validator'
-import { Prisma } from '@prisma/client'
 import { logger } from '@src/utils'
+import { DatabaseError } from 'pg'
 
 export function ExceptionHandler(err: Error, req: Request, res: Response, next: NextFunction) {
     if (res.headersSent) {
@@ -29,24 +29,17 @@ export function ExceptionHandler(err: Error, req: Request, res: Response, next: 
         return
     }
 
-    // Prisma
-    if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === 'P2025') {
-            res.status(404).json({
-                message: HTTP_ERROR_CODES.NOT_FOUND,
-                data: null,
-                timestamp: new Date().toISOString()
-            })
-            return
-        } else if (err.code === 'P2002') {
-            res.status(400).json({
+    // node postgres
+    if(err instanceof DatabaseError) {
+        // duplicate key
+        if(err.code === '23505') {
+            return res.status(400).json({
                 message: HTTP_ERROR_CODES.BAD_REQUEST,
-                data: `Unique constraint failed on the: ${err.meta!.target}`,
+                data: err.message,
                 timestamp: new Date().toISOString()
             })
-            return
         }
-    }
+    }   
 
     switch (err.message) {
         case 'invalid signature': //JsonWebTokenError
@@ -68,6 +61,7 @@ export function ExceptionHandler(err: Error, req: Request, res: Response, next: 
             res.status(429)
             break;
         default:
+            console.log(err)
             logger.warn(err)
             res.status(500)
     }

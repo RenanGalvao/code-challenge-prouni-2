@@ -1,10 +1,10 @@
 import { Router } from 'express'
 import { UsersController } from './users.controller'
 import { RoleGuard, ValidateParam, ValidateBody, ValidateQuery } from '@src/middlewares'
-import { Role } from '@prisma/client'
+import { Role } from './model'
 import { uuid } from '@src/const'
 import { CreateUserDto, UpdateUserDto } from './dto'
-import { PaginationDto } from '@src/prisma/dto'
+import { PaginationDto } from '@src/pg/dto'
 
 const baseRoute = 'users'
 const router = Router()

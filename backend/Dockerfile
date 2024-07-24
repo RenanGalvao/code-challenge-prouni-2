@@ -17,11 +17,7 @@ RUN npm ci
 COPY . . 
 
 # Creates Production Bundle
-RUN npx prisma generate && npm run build && npm prune --production
-
-# Needed for seeding
-RUN chown -R node:node ./node_modules/.prisma
-RUN chown -R node:node ./node_modules/@prisma
+RUN npm run build && npm prune --production
 
 
 ###################
@@ -35,7 +31,7 @@ ENV TZ=America/Sao_Paulo
 # Needed Files
 COPY --from=base-image --chown=node:node /usr/src/app/package.json ./
 COPY --from=base-image --chown=node:node /usr/src/app/dist ./dist
-COPY --from=base-image --chown=node:node /usr/src/app/prisma ./prisma
+COPY --from=base-image --chown=node:node /usr/src/app/migrations ./migrations
 COPY --from=base-image --chown=node:node /usr/src/app/node_modules ./node_modules
 COPY --from=base-image --chown=node:node /usr/src/app/start.sh ./
 RUN chmod +x start.sh

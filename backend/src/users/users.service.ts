@@ -1,60 +1,44 @@
-import { PrismaService } from '@src/prisma'
+import { pgService } from '@src/pg'
+import { PaginationDto } from '@src/pg/dto'
 import * as argon2 from 'argon2'
 import { CreateUserDto, UpdateUserDto } from './dto'
-import { PaginationDto } from '@src/prisma/dto'
+import { UserModel } from './model'
 
 async function findByEmail(email: string) {
-    return await PrismaService.user.findUnique({
-        where: { email }
-    })
+    const query = {
+        text: 'SELECT * FROM users WHERE email = $1;',
+        values: [email],
+    }
+    return (await pgService.query<UserModel>(query)).rows[0]
 }
 
 async function findMany(query?: PaginationDto) {
-    return await PrismaService.paginatedQuery('user', query, {
-        select: {
-            id: true,
-            name: true,
-            email: true,
-            role: true,
-            createdAt: true,
-            updatedAt: true,
-        }
-    })
+    const { limit, offset } = pgService.getLimitOffsetFromQuery(query)
+    const sqlQuery = {
+        text: 'SELECT id, name, email, role, "createdAt", "updatedAt" FROM users LIMIT $1 OFFSET $2;',
+        values: [limit, offset]
+    }
+    return (await pgService.query<UserModel[]>(sqlQuery)).rows
 }
 
 async function findOne(id: string) {
-    return await PrismaService.user.findUniqueOrThrow({
-        where: {
-            id
-        },
-        select: {
-            id: true,
-            name: true,
-            email: true,
-            role: true,
-            createdAt: true,
-            updatedAt: true,
-        }
-    })
+    const query = {
+        text: 'SELECT id, name, email, role, "createdAt", "updatedAt" FROM users WHERE id = $1;',
+        values: [id]
+    }
+    return (await pgService.query<UserModel>(query)).rows[0]
 }
 
 async function create(body: CreateUserDto) {
-    return await PrismaService.user.create({
-        data: {
-            name: body.name,
-            email: body.email,
-            role: body.role,
-            hashedPassword: await argon2.hash(body.password)
-        },
-        select: {
-            id: true,
-            name: true,
-            email: true,
-            role: true,
-            createdAt: true,
-            updatedAt: true,
-        }
-    })
+    const query = {
+        text: `INSERT INTO users (name, email, role, "hashedPassword") 
+            VALUES ($1, $2, $3, $4) 
+            RETURNING id, name, email, role, "createdAt", "updatedAt";`,
+        values: [body.name, body.email, body.role, await argon2.hash(body.password)]
+    }
+    const res = (await pgService.query<UserModel>(query))
+    console.log(res)
+    return res.rows[0]
 }
 
 async function update(id: string, body: UpdateUserDto) {
@@ -63,22 +47,36 @@ async function update(id: string, body: UpdateUserDto) {
         delete body.password
     }
 
-    return await PrismaService.user.update({
-        where: { id },
-        data: body,
-        select: {
-            id: true,
-            name: true,
-            email: true,
-            role: true,
-            createdAt: true,
-            updatedAt: true,
+    let queryBuild = ['UPDATE users']
+    let values: any[] = []
+
+    if (Object.keys(body).length > 0) {
+        queryBuild.push('SET')
+        let index = 1
+        for (const [key, value] of Object.entries(body)) {
+            queryBuild.push(`"${key}" = $${index}`)
+            values.push(value)
+            index++
         }
-    })
+    }
+    queryBuild.push(`WHERE id = $${Object.keys(body).length + 1} RETURNING id, name, email, role, "createdAt", "updatedAt";`)
+    values.push(id)
+
+    const query = {
+        text: queryBuild.join(' '),
+        values,
+    }
+    const res = (await pgService.query<UserModel>(query))
+    console.log(res)
+    return res.rows[0]
 }
 
 async function remove(id: string) {
-    await PrismaService.user.delete({ where: { id } })
+    const query = {
+        text: 'DELETE FROM users WHERE id = $1;',
+        values: [id]
+    }
+    await pgService.query<UserModel>(query)
     return null
 }
 

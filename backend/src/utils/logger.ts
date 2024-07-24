@@ -18,7 +18,12 @@ export const logger = createLogger({
 })
 
 if (process.env.NODE_ENV !== 'production') {
-    logger.add(new transports.Console({
-        format: myFormat,
-    }));
+    logger.add(new transports.Console());
+} else {
+    //
+    // - Write all logs with importance level of `error` or less to `error.log`
+    // - Write all logs with importance level of `info` or less to `combined.log`
+    //
+    logger.add(new transports.File({ filename: 'error.log', level: 'error' }))
+    logger.add(new transports.File({ filename: 'combined.log' }))
 }

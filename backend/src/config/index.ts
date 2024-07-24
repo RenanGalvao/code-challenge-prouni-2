@@ -2,6 +2,8 @@ import 'dotenv/config'
 import { generateKeyPairSync } from 'crypto'
 import { Algorithm } from 'jsonwebtoken'
 import { IRateLimiterOptions } from 'rate-limiter-flexible'
+import { ClientConfig } from 'pg'
+import { readFileSync } from 'fs'
 
 let jwtPrivateKey = process.env.JWT_PRIVATE_KEY
 let jwtPublicKey = process.env.JWT_PUBLIC_KEY
@@ -35,5 +37,8 @@ export default {
             points: 10,
             duration: 60 * 60 // 1 hour in secs
         } as IRateLimiterOptions,
-    }
+    },
+    pg: {
+        connectionString: process.env.NODE_ENV !== 'production' ? process.env.DATABASE_URL : readFileSync('/run/secrets/database_url', { encoding: 'utf-8' })
+    } as ClientConfig
 }

@@ -7,8 +7,7 @@ import { AuthRouter } from '@src/auth'
 import { HealthRouter } from '@src/health'
 import { RateLimiter, Jwt, ExceptionHandler } from '@src/middlewares'
 import { HTTP_ERROR_CODES } from '@src/const'
-import { logger } from '@src/utils'
-import { appInitLog } from '@src/utils'
+import { logger, appInitLog, gracefulShutdown } from '@src/utils'
 
 const app = express()
 
@@ -38,7 +37,8 @@ app.use(function Custom404(req, res, next) {
 })
 app.use(ExceptionHandler)
 
-app.listen(config.app.port, () => {
+const server = app.listen(config.app.port, () => {
   appInitLog(app._router)
   logger.info(`Server is running at http://localhost:${config.app.port}`)
 })
+gracefulShutdown(server)

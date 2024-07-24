@@ -1,4 +1,4 @@
-import { User } from '@prisma/client'
+import { UserModel } from '@src/users/model'
 import { UsersService } from '@src/users/users.service'
 import * as argon2 from 'argon2'
 import { sign, Algorithm } from 'jsonwebtoken'
@@ -19,7 +19,7 @@ async function signIn(body: SignInDto) {
     return await generateToken({ role, id })
 }
 
-function generateToken(user: Partial<User>) {
+function generateToken(user: Partial<UserModel>) {
     return new Promise(resolve => {
         sign(user, config.jwt.privateKey, {
             algorithm: config.jwt.algorithm as Algorithm,

@@ -15,4 +15,3 @@ Dockerfile
 !package.json
 !package-lock.json
 !ts*.json
-!prisma/**
