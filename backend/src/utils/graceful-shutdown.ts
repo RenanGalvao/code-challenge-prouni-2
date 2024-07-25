@@ -1,6 +1,6 @@
 import { Server } from 'http'
 import { logger } from '@src/utils'
-import { pgService } from '@src/pg'
+import { pgService } from '@src/postgres'
 
 async function tasks(server: Server, signal: string) {
     logger.info(`${signal} signal received.`)

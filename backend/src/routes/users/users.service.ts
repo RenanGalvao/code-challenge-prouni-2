@@ -1,5 +1,5 @@
-import { pgService } from '@src/pg'
-import { PaginationDto } from '@src/pg/dto'
+import { pgService } from '@src/postgres'
+import { PaginationDto } from '@src/postgres/dto'
 import * as argon2 from 'argon2'
 import { CreateUserDto, UpdateUserDto } from './dto'
 import { UserModel } from './model'
@@ -53,7 +53,10 @@ async function update(id: string, body: UpdateUserDto) {
         queryBuild.push('SET')
         let index = 1
         for (const [key, value] of Object.entries(body)) {
-            queryBuild.push(`"${key}" = $${index}`)
+            // comma needed after pair of key/value but not before WHERE clause
+            const comma = index !== Object.keys(body).length ? ',' : ''
+
+            queryBuild.push(`"${key}" = $${index}${comma}`)
             values.push(value)
             index++
         }

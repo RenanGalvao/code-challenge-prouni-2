@@ -4,7 +4,7 @@ import { RoleGuard, ValidateParam, ValidateBody, ValidateQuery } from '@src/midd
 import { Role } from './model'
 import { uuid } from '@src/const'
 import { CreateUserDto, UpdateUserDto } from './dto'
-import { PaginationDto } from '@src/pg/dto'
+import { PaginationDto } from '@src/postgres/dto'
 
 const baseRoute = 'users'
 const router = Router()

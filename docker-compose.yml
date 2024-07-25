@@ -1,16 +1,17 @@
 services:
   web:
     container_name: web
-    build: 
+    build:
       context: frontend
+      no_cache: true
     deploy:
       restart_policy:
         condition: on-failure
         delay: 5s
         window: 5s
-    #healthcheck:
-    #  test: wget -qO- 0.0.0.0:3000/health || exit 1
-    #  interval: 1m
+    healthcheck:
+      test: wget -qO- 0.0.0.0:3010 || exit 1
+      interval: 1m
     networks:
       - main_network
     ports:
@@ -20,12 +21,13 @@ services:
 
   api:
     container_name: api
-    build: 
+    build:
       context: backend
+      no_cache: true
     environment:
       - PORT=3000
     secrets:
-       - database_url
+      - database_url
     deploy:
       restart_policy:
         condition: on-failure
@@ -49,7 +51,7 @@ services:
       - POSTGRES_USER=db
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
     secrets:
-       - postgres_password
+      - postgres_password
     deploy:
       restart_policy:
         condition: on-failure
