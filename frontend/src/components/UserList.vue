@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
+import { defineProps, defineEmits, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { useTokenStore } from '@/stores/token'
-import type { User } from '@/lib/types/dto'
+import { useUserStore } from '@/stores/user'
+import { type User, Role } from '@/lib/types/dto'
 import { friendlyDateString } from '@/lib/utils'
 import EditIcon from '@/assets/icons/edit.vue'
 import DeleteIcon from '@/assets/icons/delete.vue'
@@ -19,6 +20,10 @@ defineEmits({
 })
 
 const tokenStore = useTokenStore()
+const userStore = useUserStore()
+const hasPermission = computed(() => {
+  return userStore.getRole === Role.ADMIN && tokenStore.isLoggedIn()
+})
 </script>
 
 <template>
@@ -44,7 +49,7 @@ const tokenStore = useTokenStore()
         <span>Atualizado em:</span>
         <span>{{ friendlyDateString(user.updatedAt ?? '') }}</span>
       </div>
-      <div v-if="tokenStore.isLoggedIn()" class="flex justify-end mt-2">
+      <div v-if="hasPermission" class="flex justify-end mt-2">
         <RouterLink :to="`/edit/${user.id}`">
           <EditIcon />
         </RouterLink>

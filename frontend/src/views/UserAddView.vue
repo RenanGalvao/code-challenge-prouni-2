@@ -2,11 +2,11 @@
 import * as yup from 'yup'
 import { ref } from 'vue'
 
-import LoaderIcon from '@/assets/icons/loader.vue'
 import MessagesContainer from '@/components/messages-container/Index.vue'
 import NavBar from '@/components/NavBar.vue'
 import Input from '@/components/Input.vue'
 import Select from '@/components/Select.vue'
+import SubmitButton from '@/components/SubmitButton.vue'
 import type { Message } from '@/lib/types'
 import { useSendForm, useValidateForm } from '@/lib/composables'
 import { TEMPLATES } from '@/lib/utils'
@@ -123,16 +123,7 @@ function resetForm() {
         required
       />
       <Select v-model="role" :options="roles" name="Acesso" placeholder="Acesso" required></Select>
-
-      <button
-        @click.prevent="sendForm"
-        class="w-full bg-complementary text-dominant rounded py-2 mt-1 flex justify-center"
-      >
-        <template v-if="isLoading">
-          <LoaderIcon />
-        </template>
-        <template v-else> Adicionar </template>
-      </button>
+      <SubmitButton :text="'Adicionar'" :is-loading="isLoading" @click="sendForm" />
     </form>
   </main>
   <MessagesContainer :messages />

@@ -1,10 +1,16 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { useTokenStore } from '@/stores/token'
+import { useUserStore } from '@/stores/user'
+import { Role } from '@/lib/types/dto'
 import PlusIcon from '@/assets/icons/plus.vue'
 const tokenStore = useTokenStore()
+const userStore = useUserStore()
+const hasPermission = computed(() => {
+  return userStore.getRole === Role.ADMIN && tokenStore.isLoggedIn()
+})
 
 const showButton = ref(true)
 const MIN_HEIGHT_TO_FADE = 50 // in px
@@ -38,11 +44,7 @@ function handleScroll(event: Event) {
 
 <template>
   <Transition>
-    <RouterLink
-      v-if="tokenStore.isLoggedIn() && showButton"
-      :to="'/add'"
-      class="fixed bottom-4 right-4 z-20 h"
-    >
+    <RouterLink v-if="hasPermission && showButton" :to="'/add'" class="fixed bottom-4 right-4 z-20 h">
       <button class="bg-complementary text-dominant p-4 rounded-md">
         <PlusIcon />
       </button>

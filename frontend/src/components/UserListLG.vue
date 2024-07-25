@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue'
+import { defineProps, defineEmits, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { useTokenStore } from '@/stores/token'
-import type { User } from '@/lib/types/dto'
+import { useUserStore } from '@/stores/user'
+import { type User, Role } from '@/lib/types/dto'
 import { friendlyDateString } from '@/lib/utils'
 import EditIcon from '@/assets/icons/edit.vue'
 import DeleteIcon from '@/assets/icons/delete.vue'
@@ -19,6 +20,10 @@ defineEmits({
 })
 
 const tokenStore = useTokenStore()
+const userStore = useUserStore()
+const hasPermission = computed(() => {
+  return userStore.getRole === Role.ADMIN && tokenStore.isLoggedIn()
+})
 </script>
 
 <template>
@@ -31,7 +36,7 @@ const tokenStore = useTokenStore()
           <th class="text-start">Acesso</th>
           <th class="text-start">Criado em</th>
           <th class="text-start">Atualizado em</th>
-          <th v-if="tokenStore.isLoggedIn()" colspan="2" class="text-start">Opções</th>
+          <th v-if="hasPermission" colspan="2" class="text-start">Opções</th>
         </tr>
       </thead>
       <tbody>
@@ -42,12 +47,12 @@ const tokenStore = useTokenStore()
             <td class="py-1">{{ user.role }}</td>
             <td class="py-1">{{ friendlyDateString(user.createdAt, true) }}</td>
             <td class="py-1">{{ friendlyDateString(user.updatedAt ?? '', true) }}</td>
-            <td v-if="tokenStore.isLoggedIn()" class="py-1">
+            <td v-if="hasPermission" class="py-1">
               <RouterLink :to="`/edit/${user.id}`">
                 <EditIcon />
               </RouterLink>
             </td>
-            <td v-if="tokenStore.isLoggedIn()" class="py-1">
+            <td v-if="hasPermission" class="py-1">
               <DeleteIcon @click="$emit('user-delete', user)" class="cursor-pointer" />
             </td>
           </tr>

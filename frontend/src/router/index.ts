@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import UsersListView from '@/views/UsersListView.vue'
 import { useTokenStore } from '@/stores/token'
+import { useUserStore } from '@/stores/user'
 import { useScreenWidth } from '@/lib/composables'
 import type { Pagination } from '@/lib/types'
+import { Role } from '@/lib/types/dto'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,10 +24,12 @@ const router = createRouter({
     {
       path: '/logout',
       name: 'Logout',
-      component: () => {},
+      component: () => { },
       beforeEnter: () => {
         const tokenStore = useTokenStore()
         tokenStore.eraseStore()
+        const userStore = useUserStore()
+        userStore.eraseStore()
         return { path: '/' }
       }
     },
@@ -55,8 +59,9 @@ const router = createRouter({
       component: () => import('@/views/UserAddView.vue'),
       beforeEnter: () => {
         const tokenStore = useTokenStore()
+        const userStore = useUserStore()
 
-        if (!tokenStore.isLoggedIn()) {
+        if (!tokenStore.isLoggedIn() || userStore.getRole !== Role.ADMIN) {
           return { path: '/login' }
         }
       }
@@ -67,8 +72,9 @@ const router = createRouter({
       component: () => import('@/views/UserEditView.vue'),
       beforeEnter: () => {
         const tokenStore = useTokenStore()
+        const userStore = useUserStore()
 
-        if (!tokenStore.isLoggedIn()) {
+        if (!tokenStore.isLoggedIn() || userStore.getRole !== Role.ADMIN) {
           return { path: '/login' }
         }
       }

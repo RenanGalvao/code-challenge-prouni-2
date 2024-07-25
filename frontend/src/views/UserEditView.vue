@@ -3,11 +3,11 @@ import * as yup from 'yup'
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 
-import LoaderIcon from '@/assets/icons/loader.vue'
 import MessagesContainer from '@/components/messages-container/Index.vue'
 import NavBar from '@/components/NavBar.vue'
 import Input from '@/components/Input.vue'
 import Select from '@/components/Select.vue'
+import SubmitButton from '@/components/SubmitButton.vue'
 import type { Message } from '@/lib/types'
 import { useLoadItem, useSendForm, useValidateForm } from '@/lib/composables'
 import { TEMPLATES } from '@/lib/utils'
@@ -126,35 +126,12 @@ async function sendForm() {
     <form class="flex flex-col w-10/12 md:w-80">
       <Input v-model="name" name="name" placeholder="Nome" autocomplete="none" required />
       <Input v-model="email" name="email" placeholder="E-mail" autocomplete="none" required />
-      <Input
-        v-model="password"
-        name="password"
-        type="password"
-        placeholder="Senha"
-        autocomplete="new-password"
-        minlength="8"
-        required
-      />
-      <Input
-        v-model="confirmPassword"
-        name="confirmPassword"
-        type="password"
-        placeholder="Confirme a senha"
-        autocomplete="new-password"
-        minlength="8"
-        required
-      />
+      <Input v-model="password" name="password" type="password" placeholder="Senha" autocomplete="new-password"
+        minlength="8" required />
+      <Input v-model="confirmPassword" name="confirmPassword" type="password" placeholder="Confirme a senha"
+        autocomplete="new-password" minlength="8" required />
       <Select v-model="role" :options="roles" name="Acesso" placeholder="Acesso" required></Select>
-
-      <button
-        @click.prevent="sendForm"
-        class="w-full bg-complementary text-dominant rounded py-2 mt-1 flex justify-center"
-      >
-        <template v-if="isLoading">
-          <LoaderIcon />
-        </template>
-        <template v-else> Salvar </template>
-      </button>
+      <SubmitButton :text="'Salvar'" :is-loading="isLoading" @click="sendForm" />
     </form>
   </main>
   <MessagesContainer :messages />

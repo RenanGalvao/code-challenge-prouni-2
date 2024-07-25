@@ -18,7 +18,7 @@ export async function easyFetch(options: EasyFetchOptions): Promise<unknown> {
     if (tokenStore.isLoggedIn()) {
       fetchOptions.headers = {
         ...fetchOptions.headers,
-        Authorization: `Bearer ${tokenStore.accessToken}`
+        Authorization: `Bearer ${tokenStore.getAccessToken}`
       }
     }
 

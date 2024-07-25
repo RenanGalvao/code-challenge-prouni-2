@@ -3,14 +3,16 @@ import { ref } from 'vue'
 import router from '@/router/index'
 
 import { useTokenStore } from '@/stores/token'
+import { useUserStore } from '@/stores/user'
 import { useSendForm } from '@/lib/composables'
 import { ApiResponse } from '@/lib/classes'
-import Input from '@/components/Input.vue'
 import MessagesContainer from '@/components/messages-container/Index.vue'
+import Input from '@/components/Input.vue'
+import SubmitButton from '@/components/SubmitButton.vue'
 import type { Message } from '@/lib/types'
-import LoaderIcon from '@/assets/icons/loader.vue'
 
 const tokenStore = useTokenStore()
+const userStore = useUserStore()
 const REDIRECT_WAIT = 1000
 
 const email = ref('')
@@ -27,7 +29,8 @@ async function sendForm() {
   isLoading.value = false
 
   if (res instanceof ApiResponse) {
-    tokenStore.updateToken(res.data)
+    tokenStore.updateToken(res.data.token)
+    userStore.updateUser(res.data.user)
     messages.value = res.messages
 
     setTimeout(async () => {
@@ -44,33 +47,10 @@ async function sendForm() {
     <form class="flex flex-col w-10/12 md:w-80">
       <h1 class="text-3xl text-center mb-2">Acesso</h1>
 
-      <Input
-        v-model="email"
-        name="email"
-        type="email"
-        placeholder="E-mail"
-        autocomplete="email"
-        required
-      />
-      <Input
-        v-model="password"
-        name="password"
-        type="password"
-        placeholder="Senha"
-        autocomplete="current-password"
-        minlength="8"
-        required
-      />
-
-      <button
-        @click.prevent="sendForm"
-        class="w-full bg-complementary text-dominant rounded py-2 mt-1 flex justify-center"
-      >
-        <template v-if="isLoading">
-          <LoaderIcon />
-        </template>
-        <template v-else> Entrar </template>
-      </button>
+      <Input v-model="email" name="email" type="email" placeholder="E-mail" autocomplete="email" required />
+      <Input v-model="password" name="password" type="password" placeholder="Senha" autocomplete="current-password"
+        minlength="8" required />
+      <SubmitButton :text="'Entrar'" :is-loading="isLoading" @click="sendForm" />
     </form>
   </main>
 

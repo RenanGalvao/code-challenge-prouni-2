@@ -14,9 +14,18 @@ async function signIn(body: SignInDto) {
         throw new Error(HTTP_ERROR_CODES.UNAUTHORIZED)
     }
 
-    // reduces JWT length
-    const { role, id } = user
-    return await generateToken({ role, id })
+    const { id, name, role } = user
+
+    return {
+        user: {
+            id,
+            name,
+            email,
+            role,
+        },
+        // reduces JWT length
+        token: await generateToken({ role, id })
+    }
 }
 
 function generateToken(user: Partial<UserModel>) {

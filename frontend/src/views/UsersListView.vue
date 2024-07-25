@@ -35,6 +35,8 @@ async function loadList() {
     totalCount.value = res.info.totalCount
     totalPages.value = res.info.totalPages
     messages.value = res.messages
+  } else {
+    messages.value = res!.messages
   }
   isLoading.value = false
 }
@@ -46,6 +48,8 @@ async function onUserDelete(user: User) {
     if (res instanceof ApiResponse) {
       messages.value = res.messages
       await loadList()
+    } else {
+      messages.value = res!.messages
     }
   }
 }
