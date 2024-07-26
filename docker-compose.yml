@@ -47,6 +47,7 @@ services:
     container_name: db
     image: postgres:16-alpine
     environment:
+      - TZ=America/Sao_Paulo
       - POSTGRES_DB=db
       - POSTGRES_USER=db
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
