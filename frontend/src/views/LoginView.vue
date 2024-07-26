@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { RouterLink } from 'vue-router'
 import router from '@/router/index'
 
 import { useTokenStore } from '@/stores/token'
@@ -52,6 +53,7 @@ async function sendForm() {
         minlength="8" required />
       <SubmitButton :text="'Entrar'" :is-loading="isLoading" @click="sendForm" />
     </form>
+    <RouterLink :to="'/'" class="text-center mt-2">Voltar</RouterLink>
   </main>
 
   <MessagesContainer :messages />
