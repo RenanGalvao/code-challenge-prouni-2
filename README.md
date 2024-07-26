@@ -30,6 +30,7 @@ Desafio feito para a posição de Node Jr. na ProUnion. Apesar de eu lidar com N
 
 ## Requisitos <a name="requisitos"></a>
 - [Docker Composer 2.x](https://docs.docker.com/compose/install/)
+- ``git clone https://github.com/RenanGalvao/code-challenge-prounion-2.git``
 
 
 ## Uso <a name="uso"></a>
@@ -43,15 +44,3 @@ Desafio feito para a posição de Node Jr. na ProUnion. Apesar de eu lidar com N
 
 ## Autor <a name="autor"></a>
 [@RenanGalvao](https://renangalvao.github.io/whoami/)
-
-
-<style>
-    h1 {
-        border: 0;
-        margin: 0;
-    }
-    h2 {
-        margin-top: 0;
-        border: 0;
-    }
-</style>

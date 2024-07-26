@@ -32,6 +32,7 @@ Busquei fazer uso das features do Vue conforme a necessidade, fiz uso de [rotas]
 
 ## Requisitos <a name="requisitos"></a>
 - [NodeJS 21.x](https://nodejs.org/en/download/prebuilt-installer/current)
+- ``git clone https://github.com/RenanGalvao/code-challenge-prounion-2.git``
 
 
 ## Uso <a name="uso"></a>
@@ -39,6 +40,7 @@ Busquei fazer uso das features do Vue conforme a necessidade, fiz uso de [rotas]
 - Senha: 12345678
 
 ### Desenvolvimento
+- Navegue até a pasta ``frontend``
 - Crie uma cópia do arquivo ``.env.example`` com o nome de ``.env``
 - Instale os pacotes necessários ``npm install``
 - ``npm run dev``
@@ -57,15 +59,3 @@ Inicie o projeto a partir do ``docker-compose.yml`` da pasta raiz.
 
 ## Autor <a name="autor"></a>
 [@RenanGalvao](https://renangalvao.github.io/whoami/)
-
-
-<style>
-    h1 {
-        border: 0;
-        margin: 0;
-    }
-    h2 {
-        margin-top: 0;
-        border: 0;
-    }
-</style>

@@ -36,6 +36,7 @@ Comentei pouco pois tentei fazer o código o mais explícito o possível, certas
 ## Requisitos <a name="requisitos"></a>
 - [NodeJS 21.x](https://nodejs.org/en/download/prebuilt-installer/current)
 - [Docker Composer 2.x](https://docs.docker.com/compose/install/)
+- ``git clone https://github.com/RenanGalvao/code-challenge-prounion-2.git``
 
 
 ## Uso <a name="uso"></a>
@@ -44,6 +45,7 @@ Comentei pouco pois tentei fazer o código o mais explícito o possível, certas
 - Senha: 12345678
 
 ### Desenvolvimento
+- Navegue até a pasta ``backend``
 - Crie uma cópia do arquivo ``.env.example`` com o nome de ``.env``
 - Instale os pacotes necessários ``npm install``
 - ``npm run dev``
@@ -69,15 +71,3 @@ Inicie o projeto a partir do ``docker-compose.yml`` da pasta raiz.
 
 ## Autor <a name="autor"></a>
 [@RenanGalvao](https://renangalvao.github.io/whoami/)
-
-
-<style>
-    h1 {
-        border: 0;
-        margin: 0;
-    }
-    h2 {
-        margin-top: 0;
-        border: 0;
-    }
-</style>
