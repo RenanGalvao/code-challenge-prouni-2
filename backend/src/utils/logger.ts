@@ -15,15 +15,8 @@ export const logger = createLogger({
     level: 'info',
     format: myFormat,
     defaultMeta: { service: 'API' },
+    transports: [
+        // it's accessible to docker logs
+        new transports.Console()
+    ]
 })
-
-if (process.env.NODE_ENV !== 'production') {
-    logger.add(new transports.Console());
-} else {
-    //
-    // - Write all logs with importance level of `error` or less to `error.log`
-    // - Write all logs with importance level of `info` or less to `combined.log`
-    //
-    logger.add(new transports.File({ filename: 'error.log', level: 'error' }))
-    logger.add(new transports.File({ filename: 'combined.log' }))
-}
