@@ -3,6 +3,7 @@ import { PaginationDto } from '@src/postgres/dto'
 import * as argon2 from 'argon2'
 import { CreateUserDto, UpdateUserDto } from './dto'
 import { UserModel } from './model'
+import { throwValidationError } from '@src/utils'
 
 async function findByEmail(email: string) {
     const query = {
@@ -13,12 +14,8 @@ async function findByEmail(email: string) {
 }
 
 async function findMany(query?: PaginationDto) {
-    const { limit, offset } = pgService.getLimitOffsetFromQuery(query)
-    const sqlQuery = {
-        text: 'SELECT id, name, email, role, "createdAt", "updatedAt" FROM users LIMIT $1 OFFSET $2;',
-        values: [limit, offset]
-    }
-    return (await pgService.query<UserModel[]>(sqlQuery)).rows
+    const sql = 'SELECT id, name, email, role, "createdAt", "updatedAt" FROM users'
+    return await pgService.findManyAsync<UserModel[]>(sql, query)
 }
 
 async function findOne(id: string) {
@@ -60,6 +57,8 @@ async function update(id: string, body: UpdateUserDto) {
             values.push(value)
             index++
         }
+    } else {
+        throwValidationError('Um campo ao menos deve ser atualizado', ['name', 'email', 'password', 'role'])
     }
     queryBuild.push(`WHERE id = $${Object.keys(body).length + 1} RETURNING id, name, email, role, "createdAt", "updatedAt";`)
     values.push(id)

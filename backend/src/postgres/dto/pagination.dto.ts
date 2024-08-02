@@ -6,7 +6,7 @@ export class PaginationDto {
     @Expose()
     @IsOptional()
     @IsInt()
-    @Transform(({ value }) => Number(value))
+    @Transform(({ value }) => value ? Number(value) : undefined)
     itemsPerPage?: number
     @Expose()
     @IsOptional()

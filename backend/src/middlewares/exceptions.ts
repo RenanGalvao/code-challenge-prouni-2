@@ -34,8 +34,8 @@ export function ExceptionHandler(err: Error, req: Request, res: Response, next: 
         // duplicate key
         if (err.code === '23505') {
             res.status(400).json({
-                message: HTTP_ERROR_CODES.BAD_REQUEST,
-                data: err.message,
+                message: 'E-mail já existe!',
+                data: {},
                 timestamp: new Date().toISOString()
             })
             return
@@ -45,20 +45,25 @@ export function ExceptionHandler(err: Error, req: Request, res: Response, next: 
     switch (err.message) {
         case 'invalid signature': //JsonWebTokenError
         case HTTP_ERROR_CODES.BAD_REQUEST:
+            err.message = 'Requisição mal formada!'
             res.status(400)
             break
         case 'jwt not active': //NotBeforeError
         case 'jwt expired': //TokenExpiredError
         case HTTP_ERROR_CODES.UNAUTHORIZED:
+            err.message = 'Sem autorização!'
             res.status(401)
             break
         case HTTP_ERROR_CODES.FORBIDDEN:
+            err.message = 'Sem acesso!'
             res.status(403)
             break
         case HTTP_ERROR_CODES.NOT_FOUND:
+            err.message = 'Não encontrado!'
             res.status(404)
             break
         case HTTP_ERROR_CODES.TOO_MANY_REQUESTS:
+            err.message = 'Muitas requisições!'
             res.status(429)
             break;
         default:

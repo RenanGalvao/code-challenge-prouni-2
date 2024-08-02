@@ -6,7 +6,7 @@ import { PaginationDto } from './dto'
 
 class PgService extends Pool {
     // used to paginate
-    getLimitOffsetFromQuery(query?: PaginationDto) {
+    private getLimitOffsetFromQuery(query?: PaginationDto) {
         query = Object.assign({}, { page: 1, itemsPerPage: 10 }, query)
 
         const page = +query.page!
@@ -17,6 +17,32 @@ class PgService extends Pool {
         }
 
         return { limit, offset }
+    }
+
+    findManyAsync<T>(sql: string, query?: PaginationDto) {
+        return new Promise<{ data: any; totalCount: number; totalPages: number }>(async (resolve, reject) => {
+            // table is the last word in the sql query (should be)
+            const originalTable = sql.substring(sql.indexOf('FROM') + ('FROM'.length)).trim()
+            const totalCountQuery = `SELECT COUNT(*) as "totalCount" FROM ${originalTable}`
+            const { totalCount } = (await this.query<{ totalCount: number }>(totalCountQuery)).rows[0]
+
+            // Append LIMIT
+            sql += ' LIMIT $1 OFFSET $2'
+
+            // LIMIT and OFFSET (pagination) params
+            const { limit, offset } = this.getLimitOffsetFromQuery(query)
+            const paginatedQuery = {
+                text: sql,
+                values: [limit, offset]
+            }
+
+            // actual data
+            const rows = (await this.query(paginatedQuery)).rows as T[]
+
+            // ensures 1 as min totalPages
+            const totalPages = Math.max(Math.ceil(totalCount / limit), 1)
+            resolve({ data: rows, totalCount, totalPages })
+        })
     }
 }
 

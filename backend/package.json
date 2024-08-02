@@ -13,7 +13,7 @@
     "db:restart": "npm run db:down && npm run db:up",
     "db:down": "docker compose down --remove-orphans -v",
     "db:up": " docker compose up -d",
-    "dev": "npm run db:restart && nodemon -r tsconfig-paths/register src/index.ts",
+    "dev": "npm run db:restart && sleep 1 && nodemon -r tsconfig-paths/register src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
