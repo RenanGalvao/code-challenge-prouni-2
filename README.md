@@ -35,7 +35,7 @@ A aplicação possui uma página de login e outras páginas para o gerenciamento
 Para informações mais detalhadas leia o README do [backend](./backend/README.md) ou [frontend](./frontend/README.md).
 
 ## Preview <a name="preview"></a>
-<!-- PREVIEW VIDEO HERE -->
+[preview-users.webm](https://github.com/user-attachments/assets/7bddcab1-b950-4f52-a7f7-271e9ecaecf3)
 
 
 ## Requisitos <a name="requisitos"></a>
