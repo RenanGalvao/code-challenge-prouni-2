@@ -1,9 +1,8 @@
-import type { EasyFetchMethod } from '@/lib/types'
-import { easyFetch } from '@/lib/utils/easy-fetch'
+import type { EasyFetchMethod, Message } from '@/lib/types'
+import { easyFetch, fetchErrorHandler } from '@/lib/utils'
 import { ApiError, ApiResponse } from '@/lib/classes'
-import { fetchErrorHandler } from '@/lib/utils'
 
-export async function useSendForm(path: string, method: EasyFetchMethod, body: any) {
+export async function sendRequest<T>(path: string, method: EasyFetchMethod, body: any = {}): Promise<ApiResponse<T> | { messages: Message[] } | undefined> {
   try {
     const res = await easyFetch({
       url: `${import.meta.env.VITE_API_URL}${path}`,
@@ -21,7 +20,7 @@ export async function useSendForm(path: string, method: EasyFetchMethod, body: a
         throw new ApiError(await res.json(), res.status)
       }
 
-      return new ApiResponse(await res.json())
+      return new ApiResponse<T>(await res.json(), res.status)
     }
   } catch (err) {
     return fetchErrorHandler(err)

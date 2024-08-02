@@ -8,9 +8,10 @@ import NavBar from '@/components/NavBar.vue'
 import Input from '@/components/Input.vue'
 import Select from '@/components/Select.vue'
 import SubmitButton from '@/components/SubmitButton.vue'
+import Signature from '@/components/Signature.vue'
+
 import type { Message } from '@/lib/types'
-import { useLoadItem, useSendForm, useValidateForm } from '@/lib/composables'
-import { TEMPLATES } from '@/lib/utils'
+import { sendRequest, validateForm, TEMPLATES } from '@/lib/utils'
 import { Role, type User } from '@/lib/types/dto'
 import { ApiResponse } from '@/lib/classes'
 
@@ -74,12 +75,11 @@ const schema = yup.object().shape(
 
 async function loadData() {
   isLoading.value = true
-  const res = await useLoadItem('/users', idFromQuery)
+  const res = await sendRequest<User>(`/users/${idFromQuery}`, 'GET')
   if (res instanceof ApiResponse) {
-    // messages.value = res.messages
-    name.value = (res.data as User).name
-    email.value = (res.data as User).email
-    role.value = (res.data as User).role
+    name.value = res.data.name
+    email.value = res.data.email
+    role.value = res.data.role
   }
   isLoading.value = false
 }
@@ -87,7 +87,7 @@ async function loadData() {
 async function sendForm() {
   isLoading.value = true
 
-  const validation = useValidateForm(
+  const validation = validateForm(
     {
       name: name.value,
       email: email.value,
@@ -103,7 +103,7 @@ async function sendForm() {
     return
   }
 
-  const res = await useSendForm(`/users/${idFromQuery}`, 'PUT', {
+  const res = await sendRequest(`/users/${idFromQuery}`, 'PUT', {
     name: name.value,
     email: email.value,
     password: password.value.length > 0 ? password.value : null,
@@ -120,7 +120,7 @@ async function sendForm() {
 </script>
 
 <template>
-  <main class="w-full h-full flex flex-col items-center pt-20">
+  <main class="w-full h-full flex flex-col items-center pt-20 pb-2 lg:pt-48">
     <NavBar :page-name="'Editar Usuário'" />
 
     <form class="flex flex-col w-10/12 md:w-80">
@@ -133,6 +133,7 @@ async function sendForm() {
       <Select v-model="role" :options="roles" name="Acesso" placeholder="Acesso" required></Select>
       <SubmitButton :text="'Salvar'" :is-loading="isLoading" @click="sendForm" />
     </form>
+    <Signature class="mt-auto" />
   </main>
   <MessagesContainer :messages />
 </template>

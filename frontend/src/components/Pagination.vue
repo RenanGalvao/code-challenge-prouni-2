@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineProps, defineEmits, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 import ChevronLeftIcon from '@/assets/icons/chevron-left.vue'
@@ -34,18 +34,14 @@ function toPage(pageNumber: number) {
 }
 
 watch(page, async () => {
-  await router.push({ path: route.path, query: { ...route.query, page: page.value } })
+  await router.replace({ path: route.path, query: { ...route.query, page: page.value } })
   emits('page-updated')
 })
 </script>
 
 <template>
-  <div class="w-full flex justify-center items-center p-2 text-lg z-20">
-    <button
-      v-if="page !== 1"
-      class="mr-2 bg-complementary text-dominant rounded w-6 h-6"
-      @click="toPage(page - 1)"
-    >
+  <div class="w-fit flex justify-center items-center p-2 text-lg z-10">
+    <button v-if="page !== 1" class="mr-1 bg-complementary text-dominant rounded w-6 h-6" @click="toPage(page - 1)">
       <ChevronLeftIcon />
     </button>
 
@@ -55,11 +51,8 @@ watch(page, async () => {
       </button>
     </template>
 
-    <button
-      v-if="page !== maxPage && page + PAGES_AROUND_CURRENT < maxPage"
-      @click="toPage(page + 1)"
-      class="ml-2 bg-complementary text-dominant rounded w-6 h-6"
-    >
+    <button v-if="page !== maxPage && page + PAGES_AROUND_CURRENT < maxPage" @click="toPage(page + 1)"
+      class="ml-1 bg-complementary text-dominant rounded w-6 h-6">
       <ChevronRightIcon />
     </button>
   </div>

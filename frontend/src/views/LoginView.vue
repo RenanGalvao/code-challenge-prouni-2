@@ -3,14 +3,16 @@ import { ref } from 'vue'
 import { RouterLink } from 'vue-router'
 import router from '@/router/index'
 
-import { useTokenStore } from '@/stores/token'
-import { useUserStore } from '@/stores/user'
-import { useSendForm } from '@/lib/composables'
-import { ApiResponse } from '@/lib/classes'
 import MessagesContainer from '@/components/messages-container/Index.vue'
 import Input from '@/components/Input.vue'
 import SubmitButton from '@/components/SubmitButton.vue'
+
+import { useTokenStore } from '@/stores/token'
+import { useUserStore } from '@/stores/user'
+import { sendRequest } from '@/lib/utils'
+import { ApiResponse } from '@/lib/classes'
 import type { Message } from '@/lib/types'
+import type { Auth } from '@/lib/types/dto'
 
 const tokenStore = useTokenStore()
 const userStore = useUserStore()
@@ -23,7 +25,7 @@ const isLoading = ref(false)
 
 async function sendForm() {
   isLoading.value = true
-  const res = await useSendForm('/auth/sign-in', 'POST', {
+  const res = await sendRequest<Auth>('/auth/sign-in', 'POST', {
     email: email.value,
     password: password.value
   })

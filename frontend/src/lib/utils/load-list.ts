@@ -5,8 +5,9 @@ import {
   easyFetch
 } from '@/lib/utils'
 import { ApiError, ApiListResponse } from '@/lib/classes'
+import type { Message } from '@/lib/types'
 
-export async function useLoadList(path: string, url: URL) {
+export async function loadList<T>(path: string, url: URL): Promise<ApiListResponse<T> | { messages: Message[] } | undefined> {
   // do not trust user input
   const pagination = fromSearchToPagination(url)
   const queryString = fromPaginationToQuery(pagination)
@@ -25,7 +26,7 @@ export async function useLoadList(path: string, url: URL) {
         throw new ApiError(await res.json(), res.status)
       }
 
-      return new ApiListResponse(await res.json(), {
+      return new ApiListResponse<T>(await res.json(), {
         status: 200,
         totalCount: Number(res.headers.get('x-total-count')),
         totalPages: Number(res.headers.get('x-total-pages'))

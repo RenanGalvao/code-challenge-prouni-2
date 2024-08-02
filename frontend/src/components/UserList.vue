@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { useTokenStore } from '@/stores/token'
@@ -9,7 +9,7 @@ import { friendlyDateString } from '@/lib/utils'
 import EditIcon from '@/assets/icons/edit.vue'
 import DeleteIcon from '@/assets/icons/delete.vue'
 
-defineProps<{
+const props = defineProps<{
   data: User[]
 }>()
 
@@ -24,10 +24,16 @@ const userStore = useUserStore()
 const hasPermission = computed(() => {
   return userStore.getRole === Role.ADMIN && tokenStore.isLoggedIn()
 })
+
+// can't use scrollBehavior from vue-router since its a div that needs to be scrolled
+const wrapperRef = ref(null as HTMLDivElement | null)
+watch(() => props.data, () => {
+  wrapperRef.value?.scrollTo({ behavior: 'smooth', top: 0 })
+})
 </script>
 
 <template>
-  <div class="w-full overflow-y-auto">
+  <div class="w-full overflow-y-auto" ref="wrapperRef">
     <div v-for="user in data" :key="user.id" class="shadow-lg rounded p-2 mb-2">
       <div class="flex justify-between">
         <span>Nome:</span>

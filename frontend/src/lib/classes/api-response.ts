@@ -1,11 +1,11 @@
 import { generateMessages } from '@/lib/utils'
 import type { Message, ApiResponse as ApiResponseType } from '@/lib/types'
 
-export class ApiResponse {
+export class ApiResponse<T> {
   messages: Message[]
-  data: any
+  data: T
   timestamp: string
-  status?: number
+  status: number
 
   constructor(apiData: ApiResponseType, status = 200) {
     this.status = status

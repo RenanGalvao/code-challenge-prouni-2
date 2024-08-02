@@ -7,9 +7,10 @@ import NavBar from '@/components/NavBar.vue'
 import Input from '@/components/Input.vue'
 import Select from '@/components/Select.vue'
 import SubmitButton from '@/components/SubmitButton.vue'
+import Signature from '@/components/Signature.vue'
+
 import type { Message } from '@/lib/types'
-import { useSendForm, useValidateForm } from '@/lib/composables'
-import { TEMPLATES } from '@/lib/utils'
+import { sendRequest, validateForm, TEMPLATES } from '@/lib/utils'
 import { Role } from '@/lib/types/dto'
 import { ApiResponse } from '@/lib/classes'
 
@@ -56,7 +57,7 @@ const schema = yup.object().shape({
 async function sendForm() {
   isLoading.value = true
 
-  const validation = useValidateForm(
+  const validation = validateForm(
     {
       name: name.value,
       email: email.value,
@@ -72,7 +73,7 @@ async function sendForm() {
     return
   }
 
-  const res = await useSendForm('/users', 'POST', {
+  const res = await sendRequest('/users', 'POST', {
     name: name.value,
     email: email.value,
     password: password.value,
@@ -98,33 +99,20 @@ function resetForm() {
 </script>
 
 <template>
-  <main class="w-full h-full flex flex-col items-center pt-20">
+  <main class="w-full h-full flex flex-col items-center pt-20 pb-2 lg:pt-48">
     <NavBar :page-name="'Adicionar Usuário'" />
 
     <form class="flex flex-col w-10/12 md:w-80">
       <Input v-model="name" name="name" placeholder="Nome" autocomplete="none" required />
       <Input v-model="email" name="email" placeholder="E-mail" autocomplete="none" required />
-      <Input
-        v-model="password"
-        name="password"
-        type="password"
-        placeholder="Senha"
-        autocomplete="new-password"
-        minlength="8"
-        required
-      />
-      <Input
-        v-model="confirmPassword"
-        name="confirmPassword"
-        type="password"
-        placeholder="Confirme a senha"
-        autocomplete="new-password"
-        minlength="8"
-        required
-      />
+      <Input v-model="password" name="password" type="password" placeholder="Senha" autocomplete="new-password"
+        minlength="8" required />
+      <Input v-model="confirmPassword" name="confirmPassword" type="password" placeholder="Confirme a senha"
+        autocomplete="new-password" minlength="8" required />
       <Select v-model="role" :options="roles" name="Acesso" placeholder="Acesso" required></Select>
       <SubmitButton :text="'Adicionar'" :is-loading="isLoading" @click="sendForm" />
     </form>
+    <Signature class="mt-auto"/>
   </main>
   <MessagesContainer :messages />
 </template>

@@ -7,9 +7,9 @@ type ApiListResponseInfo = {
   totalPages: number
 }
 
-export class ApiListResponse {
+export class ApiListResponse<T> {
   messages: Message[]
-  data: any
+  data: T[]
   timestamp: string
   info: ApiListResponseInfo
 
@@ -22,3 +22,4 @@ export class ApiListResponse {
     this.timestamp = apiData.timestamp
   }
 }
+

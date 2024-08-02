@@ -7,7 +7,7 @@ export function fetchErrorHandler(err: any) {
   if (err instanceof ApiError) {
     // DTO Error
     if (err.status === 400) {
-      if (Object.keys(err.data).length > 0) {
+      if (Array.isArray(err.data) && typeof err.data === 'object' && Object.keys(err.data).length > 0) {
         const data = []
         // {[key: string]: string[]}
         for (const [_, value] of Object.entries(err.data)) {

@@ -13,3 +13,8 @@ export type User = {
   createdAt: string
   updatedAt?: string
 }
+
+export type Auth = {
+  user: User,
+  token: string
+}

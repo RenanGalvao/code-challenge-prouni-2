@@ -26,27 +26,32 @@
 
 
 ## Sobre <a name="sobre"></a>
-A aplicação segue as orientações básicas do desafio. Foi feito como SPA com build final estático, não seria necessário criar uma imagem docker para ele mas como não sabia muito bem se o Vue iria gerar um servidor ou não deixei assim, porém com um setup mínimo, olhe o Dockerfile para mais informações. Apenas usuários com acesso de ADMIN conseguem criar, atualizar, editar e remover usuários, usuários comuns apesar de conseguirem logar não conseguem fazer nenhuma dessas ações, o layout inclusive é diferente.
+A aplicação segue as orientações básicas do desafio. Foi feito como [SSG](https://vuejs.org/guide/extras/ways-of-using-vue.html#jamstack-ssg)/[SPA](https://vuejs.org/guide/extras/ways-of-using-vue.html#single-page-application-spa), não seria necessário criar uma imagem docker para ele mas como não sabia muito bem se o Vue iria gerar um servidor ou não deixei assim, porém com um setup mínimo, olhe o Dockerfile para mais informações. 
+
+Apenas usuários com acesso de ADMIN conseguem criar, atualizar, editar e remover usuários, usuários comuns apesar de conseguirem logar não conseguem fazer nenhuma dessas ações, o layout inclusive é diferente.
 
 Busquei fazer uso das features do Vue conforme a necessidade, fiz uso de [rotas](https://router.vuejs.org/) já que há várias views, [Pinia](https://pinia.vuejs.org/) para lidar com estado compartilhado, [composables](https://vuejs.org/guide/reusability/composables.html) para lidar com códigos reutilizáveis e claro, componentes na medida do razoável para evitar repetições. O layout é responsível e simples.
 
 ## Requisitos <a name="requisitos"></a>
 - [NodeJS 21.x](https://nodejs.org/en/download/prebuilt-installer/current)
-- ``git clone https://github.com/RenanGalvao/code-challenge-prounion-2.git``
 
 
 ## Uso <a name="uso"></a>
-- Usuário: admin@admin.com
-- Senha: 12345678
+- Primeiro clone o projeto: ``git clone https://github.com/RenanGalvao/code-challenge-prounion-2.git``
+- Acesse a pasta clonada ``code-challenge-prounion-2``
 
 ### Desenvolvimento
 - Navegue até a pasta ``frontend``
 - Crie uma cópia do arquivo ``.env.example`` com o nome de ``.env``
 - Instale os pacotes necessários ``npm install``
-- ``npm run dev``
-- Acesse http://localhost:5173 pelo navegador
+- Suba o aplicativo ``npm run dev``
+- Acesse [http://localhost:3010](http://localhost:3010) pelo navegador
+- Usuário: ``admin@admin.com``
+- Senha: ``12345678``
 
-### "Produção"
+Note que se você não subir o [backend](../backend/README.md) também, serão apresentadas mensages de erro quando o aplicativo tentar fazer requisições à API.
+
+### Produção
 Inicie o projeto a partir do ``docker-compose.yml`` da pasta raiz.
 
 

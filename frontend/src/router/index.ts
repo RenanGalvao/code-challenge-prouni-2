@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import UsersListView from '@/views/UsersListView.vue'
 import { useTokenStore } from '@/stores/token'
 import { useUserStore } from '@/stores/user'
-import { useScreenWidth } from '@/lib/composables'
 import type { Pagination } from '@/lib/types'
 import { Role } from '@/lib/types/dto'
 
@@ -38,17 +37,12 @@ const router = createRouter({
       name: 'Usuários',
       component: UsersListView,
       beforeEnter: (to, from) => {
-        const { LG_SCREEN_SIZE, widthScreen } = useScreenWidth()
         const pagination = {
-          itemsPerPage: widthScreen.value >= LG_SCREEN_SIZE ? 10 : 5,
+          itemsPerPage: 10,
           page: 1
         } as Pagination
 
-        if (
-          !to.query.page ||
-          !to.query.itemsPerPage ||
-          Number(to.query.itemsPerPage) !== pagination.itemsPerPage
-        ) {
+        if (!to.query.page || !to.query.itemsPerPage) {
           return { path: '/', query: { ...pagination, ...from.query } }
         }
       }
@@ -79,9 +73,10 @@ const router = createRouter({
         }
       }
     },
-    { path: '/:pathMatch(.*)*', 
-      name: 'NotFound', 
-      component: () => import('@/views/NotFoundView.vue') 
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('@/views/NotFoundView.vue')
     },
   ]
 })

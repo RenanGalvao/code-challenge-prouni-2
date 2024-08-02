@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, computed } from 'vue'
+import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
 import { useTokenStore } from '@/stores/token'

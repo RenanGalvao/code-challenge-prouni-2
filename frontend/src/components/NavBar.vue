@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, computed } from 'vue'
+import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 
 import { useTokenStore } from '@/stores/token'
@@ -31,25 +31,27 @@ const name = computed(() => {
 </script>
 
 <template>
-  <nav class="w-full fixed top-0 p-4 shadow-md flex justify-between items-center bg-dominant sm">
-    <header class="flex justify-center items-center">
-      <RouterLink v-if="route.path !== '/'" :to="'/'">
-        <ChevronLeftIcon class="mr-1 w-8 h-8" />
-      </RouterLink>
-      <h1 class="text-xl">{{ pageName }}</h1>
-    </header>
+  <nav class="w-full fixed top-0 p-4 shadow-md  bg-dominant">
+    <div class="flex justify-between items-center lg:w-11/12 xl:w-8/12 mx-auto">
+      <header class="flex justify-center items-center">
+        <RouterLink v-if="route.path !== '/'" :to="'/'">
+          <ChevronLeftIcon class="mr-1 w-8 h-8" />
+        </RouterLink>
+        <h1 class="text-xl">{{ pageName }}</h1>
+      </header>
 
-    <div v-if="!tokenStore.isLoggedIn()">
-      <RouterLink :to="'/login'" class="flex">Entrar
-        <LoginIcon class="ml-1" />
-      </RouterLink>
-    </div>
+      <div v-if="!tokenStore.isLoggedIn()">
+        <RouterLink :to="'/login'" class="flex">Entrar
+          <LoginIcon class="ml-1" />
+        </RouterLink>
+      </div>
 
-    <div v-if="tokenStore.isLoggedIn()" class="flex">
-      <span class="mr-2">Olá, {{ name }}</span>
-      <RouterLink :to="'/logout'" class="flex">Sair
-        <LogoutIcon class="ml-1" />
-      </RouterLink>
+      <div v-if="tokenStore.isLoggedIn()" class="flex">
+        <span class="mr-2">Olá, {{ name }}</span>
+        <RouterLink :to="'/logout'" class="flex">Sair
+          <LogoutIcon class="ml-1" />
+        </RouterLink>
+      </div>
     </div>
   </nav>
 </template>

@@ -6,7 +6,7 @@
   "author": "https://github.com/RenanGalvao",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 3010",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
     "build-only": "vite build",

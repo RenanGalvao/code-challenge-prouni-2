@@ -1,12 +1,9 @@
 <template>
   <Transition>
-    <div
-      v-if="!silent && isOpen"
-      :class="`bg-${variant}`"
-      class="toast min-w-full p-2 border-2 border-solid rounded mb-1 flex items-center justify-between md:min-w-80"
-    >
+    <div v-if="!silent && isOpen" :class="`bg-${variant}`"
+      class="toast min-w-full p-2 border-2 border-solid rounded mb-1 flex items-center justify-between md:min-w-80">
       <div>{{ message }}</div>
-      <button @click="close">Fechar</button>
+      <button class="ml-1" @click="close">Fechar</button>
     </div>
   </Transition>
 </template>
@@ -56,6 +53,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 
+const emits = defineEmits({
+  close(id: number) { return !!id }
+})
+
 const props = defineProps({
   id: {
     type: Number,
@@ -78,7 +79,7 @@ const props = defineProps({
   duration: {
     type: Number,
     required: false,
-    default: 5 * 1000 // in ms
+    default: 3 * 1000 // in ms
   },
   delay: {
     type: Number,
@@ -104,5 +105,6 @@ if (autoHide.value) {
 
 function close() {
   isOpen.value = false
+  emits('close', props.id)
 }
 </script>
