@@ -1,10 +1,20 @@
--- Create Users Table
-CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
+-- Create Types
+DO $$
+BEGIN IF NOT EXISTS (
+    SELECT
+    FROM
+        pg_type
+    WHERE
+        typname = 'Role'
+) THEN CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
 
-CREATE TABLE "users" (
+END IF;
+END$$;
+
+CREATE TABLE IF NOT EXISTS "users" (
     "id" TEXT NOT NULL DEFAULT gen_random_uuid(),
     "name" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
+    "email" TEXT NOT NULL UNIQUE,
     "hashedPassword" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'USER',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -12,12 +22,11 @@ CREATE TABLE "users" (
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
 
-CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
-
 -- Auto Update updatedAt field
 CREATE EXTENSION IF NOT EXISTS moddatetime;
 
-CREATE TRIGGER "users_updated_at" BEFORE
+CREATE
+OR REPLACE TRIGGER "users_updated_at" BEFORE
 UPDATE
     ON "users" FOR EACH ROW EXECUTE PROCEDURE moddatetime ("updatedAt");
 

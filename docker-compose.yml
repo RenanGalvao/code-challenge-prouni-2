@@ -4,6 +4,7 @@ services:
     build:
       context: frontend
       no_cache: true
+    image: code-challenge-users-web
     deploy:
       restart_policy:
         condition: on-failure
@@ -24,6 +25,7 @@ services:
     build:
       context: backend
       no_cache: true
+    image: code-challenge-users-api
     environment:
       - PORT=3000
     secrets:

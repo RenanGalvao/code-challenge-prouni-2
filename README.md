@@ -51,6 +51,7 @@ Para informações mais detalhadas leia o README do [backend](./backend/README.m
 - Usuário: ``admin@admin.com``
 - Senha: ``12345678``
 - Utilize ``docker compose down -v`` para parar os serviços e remover os volumes associados
+- Para remover as imagens criadas utilize ``docker image rm code-challenge-users-web code-challenge-users-api``
 
 
 ## Autor <a name="autor"></a>
